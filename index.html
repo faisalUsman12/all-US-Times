@@ -2,65 +2,49 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>US Time Zone Dashboard</title>
+    <title>US Time Zones</title>
     <style>
-        :root {
-            --bg-color: #f4f7f6;
-            --card-bg: #ffffff;
-            --text-main: #333;
-            --accent: #2c3e50;
-        }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-        }
-        h1 { margin-bottom: 30px; color: var(--accent); }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            width: 100%;
-            max-width: 1200px;
-        }
-        .clock-card {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            text-align: center;
-            transition: transform 0.2s;
-        }
-        .clock-card:hover { transform: translateY(-5px); }
-        .zone-name { font-weight: bold; font-size: 1.1rem; color: #7f8c8d; margin-bottom: 10px; }
-        .time-display { font-size: 2rem; font-weight: 700; color: var(--accent); }
-        .date-display { font-size: 0.9rem; color: #95a5a6; margin-top: 5px; }
+        body { font-family: sans-serif; background: #f4f7f6; text-align: center; padding: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; max-width: 1000px; margin: 0 auto; }
+        .card { background: white; padding: 15px; border-radius: 8px; shadow: 0 2px 5px rgba(0,0,0,0.1); border: 1px solid #ddd; }
+        .time { font-size: 1.5rem; font-weight: bold; color: #2c3e50; }
     </style>
 </head>
 <body>
-
     <h1>United States Time Zones</h1>
-    
-    <div class="grid" id="clock-grid">
-        </div>
+    <div class="grid" id="clock-grid"></div>
 
     <script>
-        const timeZones = [
-            { label: "Eastern (ET)", zone: "America/New_York" },
-            { label: "Central (CT)", zone: "America/Chicago" },
-            { label: "Mountain (MT)", zone: "America/Denver" },
-            { label: "Arizona (No DST)", zone: "America/Phoenix" },
-            { label: "Pacific (PT)", zone: "America/Los_Angeles" },
-            { label: "Alaska (AKT)", zone: "America/Anchorage" },
-            { label: "Hawaii (HST)", zone: "Pacific/Honolulu" },
-            { label: "Puerto Rico (AST)", zone: "America/Puerto_Rico" },
-            { label: "Guam (ChST)", zone: "Pacific/Guam" }
-        ];
+        window.onload = function() {
+            const zones = [
+                { label: "Eastern", zone: "America/New_York" },
+                { label: "Central", zone: "America/Chicago" },
+                { label: "Mountain", zone: "America/Denver" },
+                { label: "Pacific", zone: "America/Los_Angeles" },
+                { label: "Alaska", zone: "America/Anchorage" },
+                { label: "Hawaii", zone: "Pacific/Honolulu" }
+            ];
 
-        function createClocks() {
-            const grid = document.
+            const grid = document.getElementById('clock-grid');
+            
+            // Create cards
+            zones.forEach((tz, i) => {
+                grid.innerHTML += `<div class="card">
+                    <div>${tz.label}</div>
+                    <div class="time" id="tz-${i}">--:--:--</div>
+                </div>`;
+            });
+
+            function tick() {
+                zones.forEach((tz, i) => {
+                    const time = new Date().toLocaleTimeString('en-US', { timeZone: tz.zone });
+                    document.getElementById(`tz-${i}`).textContent = time;
+                });
+            }
+
+            tick();
+            setInterval(tick, 1000);
+        };
+    </script>
+</body>
+</html>
